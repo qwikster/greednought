@@ -14,6 +14,9 @@ def init_game():
         "location": "spawn",
         "coins": 60,
         "inventory": [],
+        "battle": "",
+        "weapon": "",
+        "armor": "",
     }
     rooms = {
         "spawn": {
@@ -54,12 +57,24 @@ def init_game():
         "moldybaguette": {
             "name": "Moldy Baguette",
             "flavor": "It's been here for two or three weeks.",
+            "type": "junk", # potion, armor, weapon, jewlery, junk
             "description": "A certain red-haired pear dropped this on her way to starting\n"
             "on this quest a few weeks ago. There are drool stains and teeth marks.\n"
             "Please don't eat this if you don't want to turn sillier than you are.\n",
         }
     }
-    enemies = {}
+    enemies = {
+        "grue": {
+            "name": "Grue",
+            "hitpoints": 20,
+            "attacktext": "The Grue swings its hairy fist, dealing ",
+            "misstext": "The Grue swings and misses you by a single grue hair.",
+            "damage": 5,
+            "killtext": "You have been eaten by a Grue",
+            "flavor": "It's just doing grue things.",
+            "drops": ["gruehair", "gruepaw", "grueshield"]
+        }
+    }
     return player, rooms, items, enemies
 
 def help():
@@ -87,13 +102,33 @@ def get_item(item, player, rooms, items, enemies):
         return None
 
 def use_item(item, player, rooms, items, enemies):
-    pass
+    if items[item]["type"] == "potion":
+        if item == "healthpotion":
+            pass
+        elif item == "poisonpotion":
+            pass
+    else:
+        print("You can't use this item! Try 'equip'ping it?")
 
 def drop_item(item, player, rooms, items, enemies):
-    pass
+    rooms[player["location"]]["items"].append(item)
+    player["inventory"].remove(item)
 
 def equip_item(item, player, rooms, items, enemies):
-    pass
+    if items[item]["type"] == "weapon":
+        if item == "gruepaw":
+            player["weapon"] = "gruepaw"
+            print(f"Equipped your {items[item]["name"]}.")
+        elif item == "item":
+            pass
+    elif items[item]["type"] == "armor":
+        if item == "grueshield":
+            player["weapon"] = "grueshield"
+            print(f"Equipped your {items[item]["name"]}.")
+        elif item == "item":
+            pass
+    else:
+        print("That's not armor or a weapon. Maybe you meant to 'use' this?")
     
 def move_player(direction, player, rooms, items, enemies):
     pass
@@ -123,7 +158,7 @@ def check_location(location, player, rooms, items, enemies):
                 print("(the man sighs): Maybe you'll come back another time and give me another chance")
         else:
             pass
-    elif location == ...:
+    elif location == "aaa":
         pass
 
 def input_parser(cmd_in, player, rooms, items, enemies):
@@ -144,28 +179,28 @@ def input_parser(cmd_in, player, rooms, items, enemies):
         try:
             get_item(get, player, rooms, items, enemies)
         except Exception:
-            print(fail)
+            print(fail[1])
     
     elif command.startswith("use"):
         use = command.split(" ", 1)[1]
         try:
             use_item(use, player, rooms, items, enemies)
         except Exception:
-            print(fail)
+            print(fail[1])
     
     elif command.startswith("drop"):
         drop = command.split(" ", 1)[1]
         try:
             drop_item(drop, player, rooms, items, enemies)
         except Exception:
-            print(fail)
+            print(fail[1])
             
     elif command.startswith("equip"):
         equip = command.split(" ", 1)[1]
         try:
             equip_item(equip, player, rooms, items, enemies)
         except Exception:
-            print(fail)
+            print(fail[1])
     
     elif command.startswith("examine"):
         item = command.split(" ", 1)[1]
@@ -183,14 +218,17 @@ def input_parser(cmd_in, player, rooms, items, enemies):
         
     elif command.startswith("go"):
         direction = command.split(" ", 1)[1]
-        move_player(direction, player, rooms, items, enemies)
+        if player["battle"] != "":
+            move_player(direction, player, rooms, items, enemies)
+        else:
+            print("You can't just leave, you're in a fight!")
         
     elif command.startswith("attack"):
         attack = command.split(" ", 1)[1]
         try:
             attack(attack, player, rooms, items, enemies)
         except Exception:
-            print(fail)
+            print(fail[1])
             
     elif command == "run":
         run(player, rooms, items, enemies)
