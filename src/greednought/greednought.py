@@ -15,8 +15,8 @@ def init_game():
         "coins": 60,
         "inventory": [],
         "battle": "",
-        "weapon": "",
-        "armor": "",
+        "weapon": "fists",
+        "armor": "clothes",
         "min_dmg": 3,
         "max_dmg": 10,
         "hp": 30,
@@ -28,7 +28,7 @@ def init_game():
             "text": "You enter into the room at the back of the tavern and \n"
                     "notice a gaping hole at the back of it. What lies at the end \n"
                     "is unknown, but it's thought that it contains the legendary \n"
-                    "treasure of the Schmamework 69. \n",
+                    "treasure of the Schmamework 69.",
             "exits": {
                 "north": "entrance",
                 "south": "tavern",
@@ -52,7 +52,7 @@ def init_game():
             "flavor": "A bustling tavern full of drunken men.",
             "text": "You decide that the rumored treasure isn't worth the loss\n"
                     "of your sleep schedule and return to the tavern, drinking\n"
-                    "with your buddies and trying to forget about the cave.\n",
+                    "with your buddies and trying to forget about the cave.",
             "exits": {},
             "items": [],
             "enemies": []
@@ -65,7 +65,7 @@ def init_game():
             "type": "junk",  # potion, armor, weapon, jewelry, junk
             "description": "A certain red-haired pear dropped this on her way to starting\n"
                            "on this quest a few weeks ago. There are drool stains and teeth marks.\n"
-                           "Please don't eat this if you don't want to turn sillier than you are.\n",
+                           "Please don't eat this if you don't want to turn sillier than you are.",
         },
         "gruehair": {
             "name": "Grue Hair",
@@ -90,6 +90,21 @@ def init_game():
             "hp": 40,
             "description": "The grue doesn't part with its hand very easily. But I suppose a human\n"
                            "probably wouldn't part with its hand very easily either."
+        },
+        "fists": {
+            "name": "Fists",
+            "flavor": "Your bare fists.",
+            "type": "weapon",
+            "max_dmg": 10,
+            "min_dmg": 3,
+            "description": "You have poor form, but your sheer strength seems to make up for it for the moment."
+        },
+        "clothes": {
+            "name": "Plainclothes",
+            "flavor": "Your average every day clothes.",
+            "type": "armor",
+            "hp": 30,
+            "description": "The clothes of a jester. Just like you! What a coincidence"
         }
     }
     enemies = {
@@ -119,12 +134,13 @@ def help():
           "attack creature: Swing at a creature \n"
           "run: Escape a battle \n"
           "win: Naturally... \n"
-          "quit: Why would you ever want to do that? \n"
+          "quit: Why would you ever want to do that?"
           )
 
 def get_item(item, player, rooms, items, enemies):
     if item in rooms[player["location"]]["items"]:
         player["inventory"].append(item)
+        rooms[player["location"]]["items"].remove(item)
         print(f"Picked up a {items[item]['name']}. {items[item]['flavor']}")
     else:
         print(f"You can't see any {item} here")
@@ -136,7 +152,7 @@ def use_item(item, player, rooms, items, enemies):
         return
     if items[item]["type"] == "potion":
         if item == "healthpotion":
-            player["hp"] += 10
+            player["hp"] = min(player["hp"] + 10, player["max_hp"])
             print("You heal for 10 HP.")
             player["inventory"].remove(item)
         elif item == "poisonpotion":
@@ -148,6 +164,12 @@ def use_item(item, player, rooms, items, enemies):
 
 def drop_item(item, player, rooms, items, enemies):
     if item in player["inventory"]:
+        if item == player["weapon"]:
+            print(f"Unequipped your {item}\n")
+            equip_item("fists", player, rooms, items, enemies)
+        if item == player["armor"]:
+            print(f"Unequipped your {item}\n")
+            equip_item("clothes", player, rooms, items, enemies)
         rooms[player["location"]]["items"].append(item)
         player["inventory"].remove(item)
         print(f"You dropped the {items[item]['name']}.")
@@ -160,9 +182,14 @@ def equip_item(item, player, rooms, items, enemies):
         return
     if items[item]["type"] == "weapon":
         player["weapon"] = item
+        player["min_dmg"] = items[item]["min_dmg"]
+        player["max_dmg"] = items[item]["max_dmg"]
         print(f"Equipped your {items[item]['name']}.")
     elif items[item]["type"] == "armor":
         player["armor"] = item
+        player["max_hp"] = items[item]["hp"]
+        if player["hp"] > player["max_hp"]:
+            player["hp"] = player["max_hp"]
         print(f"Equipped your {items[item]['name']}.")
     else:
         print("That's not armor or a weapon. Maybe you meant to 'use' this?")
@@ -231,10 +258,6 @@ def run(player, rooms, items, enemies):
         else:
             print(enemies[enemy]["misstext"])
 
-def update_stats(player, items):
-    if player["armor"] != "":
-        player["hp"] = items[player["armor"]]["hp"]
-
 def check_location(location, player, rooms, items, enemies):
     if location == "tavern":
         print("Game Over! Neutral ending...?")
@@ -252,9 +275,7 @@ def check_location(location, player, rooms, items, enemies):
                 player["coins"] += 5
                 print(f"You win! You're up 5 coins, with your total now being {player['coins']}")
                 print("(the man sighs): Maybe you'll come back another time and give me another chance")
-        else:
-            pass
-    else:
+    elif location == "temp":
         pass
 
 def input_parser(cmd_in, player, rooms, items, enemies):
@@ -276,60 +297,68 @@ def input_parser(cmd_in, player, rooms, items, enemies):
             print(f"There is a {i} here. {items[i]['flavor']}")
         for i in rooms[player["location"]]["exits"]:
             index = rooms[player["location"]]["exits"][i]
-            print(f"To your {i}: {rooms[index]["flavor"]}")
+            print(f"To your {i}: {rooms[index]['flavor']}")
 
     elif command.startswith("get") or command.startswith("take"):
-        get = command.split(" ", 1)[1]
         try:
+            get = command.split(" ", 1)[1]
             get_item(get, player, rooms, items, enemies)
         except Exception:
             print(fail[1])
 
     elif command.startswith("use"):
-        use = command.split(" ", 1)[1]
         try:
+            use = command.split(" ", 1)[1]
             use_item(use, player, rooms, items, enemies)
         except Exception:
             print(fail[1])
 
     elif command.startswith("drop"):
-        drop = command.split(" ", 1)[1]
         try:
+            drop = command.split(" ", 1)[1]
             drop_item(drop, player, rooms, items, enemies)
         except Exception:
             print(fail[1])
 
     elif command.startswith("equip"):
-        equip = command.split(" ", 1)[1]
         try:
+            equip = command.split(" ", 1)[1]
             equip_item(equip, player, rooms, items, enemies)
         except Exception:
             print(fail[1])
 
     elif command.startswith("examine"):
-        item = command.split(" ", 1)[1]
-        if item in player["inventory"]:
-            print(f"It's a {items[item]['name']}.")
-            print(items[item]["flavor"])
-            print(items[item]["description"])
-        else:
-            print("You don't have that item.")
+        try:
+            item = command.split(" ", 1)[1]
+            if item in player["inventory"]:
+                print(f"It's a {items[item]['name']}.")
+                print(items[item]["flavor"])
+                print(items[item]["description"])
+            else:
+                print("You don't have that item.")
+        except Exception:
+            print(fail[1])
 
     elif command == "inventory" or command == "inv":
+        print(f"Player | HP: {player['hp']}/{player['max_hp']} | Coins: {player['coins']}")
+        print(f"Armor: {player['armor']} | Weapon: {player['weapon']} ({player['min_dmg']}-{player['max_dmg']} dmg)\n")
         print("Your backpack contains:")
         for i in player["inventory"]:
             print(f"{i}: {items[i]['flavor']}")
 
     elif command.startswith("go"):
-        direction = command.split(" ", 1)[1]
-        if player["battle"] == "":
-            move_player(direction, player, rooms, items, enemies)
-        else:
-            print("You can't just leave, you're in a fight!")
+        try:
+            direction = command.split(" ", 1)[1]
+            if player["battle"] == "":
+                move_player(direction, player, rooms, items, enemies)
+            else:
+                print("You can't just leave, you're in a fight!\n")
+        except Exception:
+            print(fail[1])
 
     elif command.startswith("attack"):
-        target = command.split(" ", 1)[1]
         try:
+            target = command.split(" ", 1)[1]
             attack(target, player, rooms, items, enemies)
         except Exception:
             print(fail[1])
@@ -358,13 +387,12 @@ def input_parser(cmd_in, player, rooms, items, enemies):
         print("Me too")
 
     else:
-        print("I don't understand.")
+        print(f"I don't understand. {fail[1]}")
 
 def game_loop(player, rooms, items, enemies):
     first_time = True
-    update_stats(player, items)
     while True:
-        location = player["location"]
+        location = str(player["location"])
         if first_time:
             first_time = False
             print(f"You are in {rooms[location]['flavor'].lower()}")
@@ -373,15 +401,14 @@ def game_loop(player, rooms, items, enemies):
                 print(f"There is a {i} here. {items[i]['flavor']}")
             for i in rooms[player["location"]]["exits"]:
                 index = rooms[player["location"]]["exits"][i]
-                print(f"To your {i}: {rooms[index]["flavor"]}")
+                print(f"To your {i}: {rooms[index]['flavor']}")
 
         command = input("\n...> ")
+        input_parser(command, player, rooms, items, enemies)
         if player["location"] != location:
             first_time = True
-            location = player["location"]
+            location = str(player["location"])
             check_location(location, player, rooms, items, enemies)
-
-        input_parser(command, player, rooms, items, enemies)
 
 def main():
     sys.excepthook = handle_exit
