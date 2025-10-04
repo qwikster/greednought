@@ -2,12 +2,14 @@ import time  # noqa: F401
 import sys
 import random
 
+
 def handle_exit(exc_type, exc_value, exc_traceback):
     if exc_type is KeyboardInterrupt:
         print("You run screaming in fear so loudly that you don't even think to use the 'quit' command.")
         sys.exit(0)
     else:
         sys.__excepthook__(exc_type, exc_value, exc_traceback)
+
 
 def init_game():
     player = {
@@ -39,7 +41,7 @@ def init_game():
         "entrance": {
             "flavor": "A gaping, dusty, damp cave.",
             "text": "The cave begins to widen. You can tell something is definitely\n"
-                    "down here, althought you have no clue where to even begin knowing\n"
+                    "down here, although you have no clue where to even begin knowing\n"
                     "what it might be.",
             "exits": {
                 "south": "spawn",
@@ -78,8 +80,8 @@ def init_game():
             "name": "Grue's Paw",
             "flavor": "It's a grue's paw, with its claws permanently extended.",
             "type": "weapon",
-            "max_dmg": 12,
             "min_dmg": 1,
+            "max_dmg": 12,
             "description": "The grue doesn't part with its hand very easily. But I suppose a human\n"
                            "probably wouldn't part with its hand very easily either."
         },
@@ -121,6 +123,7 @@ def init_game():
     }
     return player, rooms, items, enemies
 
+
 def help():
     print("Welcome to Greednought! \n"
           "look: Take another look around \n"
@@ -137,6 +140,7 @@ def help():
           "quit: Why would you ever want to do that?"
           )
 
+
 def get_item(item, player, rooms, items, enemies):
     if item in rooms[player["location"]]["items"]:
         player["inventory"].append(item)
@@ -144,7 +148,7 @@ def get_item(item, player, rooms, items, enemies):
         print(f"Picked up a {items[item]['name']}. {items[item]['flavor']}")
     else:
         print(f"You can't see any {item} here")
-        return None
+
 
 def use_item(item, player, rooms, items, enemies):
     if item not in items:
@@ -162,6 +166,7 @@ def use_item(item, player, rooms, items, enemies):
     else:
         print("You can't use this item! Try 'equip'ping it?")
 
+
 def drop_item(item, player, rooms, items, enemies):
     if item in player["inventory"]:
         if item == player["weapon"]:
@@ -176,6 +181,7 @@ def drop_item(item, player, rooms, items, enemies):
     else:
         print("You don't have that item.")
 
+
 def equip_item(item, player, rooms, items, enemies):
     if item not in items:
         print("That item does not exist.")
@@ -184,15 +190,21 @@ def equip_item(item, player, rooms, items, enemies):
         player["weapon"] = item
         player["min_dmg"] = items[item]["min_dmg"]
         player["max_dmg"] = items[item]["max_dmg"]
+        player["min_dmg"] = items[item]["min_dmg"]
+        player["max_dmg"] = items[item]["max_dmg"]
         print(f"Equipped your {items[item]['name']}.")
     elif items[item]["type"] == "armor":
         player["armor"] = item
         player["max_hp"] = items[item]["hp"]
         if player["hp"] > player["max_hp"]:
             player["hp"] = player["max_hp"]
+        player["max_hp"] = items[item]["hp"]
+        if player["hp"] > player["max_hp"]:
+            player["hp"] = player["max_hp"]
         print(f"Equipped your {items[item]['name']}.")
     else:
         print("That's not armor or a weapon. Maybe you meant to 'use' this?")
+
 
 def move_player(direction, player, rooms, items, enemies):
     location = player["location"]
@@ -202,6 +214,7 @@ def move_player(direction, player, rooms, items, enemies):
     next_room = rooms[location]["exits"][direction]
     player["location"] = next_room
     print(f"You move {direction} into {rooms[next_room]['flavor'].lower()}")
+    print("")
     print(rooms[next_room]["text"])
     for i in rooms[next_room]["items"]:
         print(f"There is a {i} here. {items[i]['flavor']}")
@@ -209,6 +222,7 @@ def move_player(direction, player, rooms, items, enemies):
         enemy = rooms[next_room]["enemies"][0]
         player["battle"] = enemy
         print(f"A {enemies[enemy]['name']} appears! {enemies[enemy]['flavor']}")
+
 
 def attack(target_name, player, rooms, items, enemies):
     if player["battle"] == "":
@@ -239,6 +253,7 @@ def attack(target_name, player, rooms, items, enemies):
     else:
         print(enemies[enemy]["misstext"])
 
+
 def run(player, rooms, items, enemies):
     if player["battle"] == "":
         print("You aren't in combat.")
@@ -257,6 +272,7 @@ def run(player, rooms, items, enemies):
                 sys.exit(0)
         else:
             print(enemies[enemy]["misstext"])
+
 
 def check_location(location, player, rooms, items, enemies):
     if location == "tavern":
@@ -291,16 +307,19 @@ def input_parser(cmd_in, player, rooms, items, enemies):
         help()
 
     elif command == "look":
-        print(f"You are in {rooms[player['location']]['flavor']}")
+        print(f"You are in {rooms[player['location']]['flavor'].lower()}")
         print(rooms[player["location"]]["text"])
         for i in rooms[player["location"]]["items"]:
             print(f"There is a {i} here. {items[i]['flavor']}")
+        print("")
         for i in rooms[player["location"]]["exits"]:
             index = rooms[player["location"]]["exits"][i]
+            print(f"To your {i}: {rooms[index]['flavor']}")
             print(f"To your {i}: {rooms[index]['flavor']}")
 
     elif command.startswith("get") or command.startswith("take"):
         try:
+            get = command.split(" ", 1)[1]
             get = command.split(" ", 1)[1]
             get_item(get, player, rooms, items, enemies)
         except Exception:
@@ -309,6 +328,7 @@ def input_parser(cmd_in, player, rooms, items, enemies):
     elif command.startswith("use"):
         try:
             use = command.split(" ", 1)[1]
+            use = command.split(" ", 1)[1]
             use_item(use, player, rooms, items, enemies)
         except Exception:
             print(fail[1])
@@ -316,12 +336,14 @@ def input_parser(cmd_in, player, rooms, items, enemies):
     elif command.startswith("drop"):
         try:
             drop = command.split(" ", 1)[1]
+            drop = command.split(" ", 1)[1]
             drop_item(drop, player, rooms, items, enemies)
         except Exception:
             print(fail[1])
 
     elif command.startswith("equip"):
         try:
+            equip = command.split(" ", 1)[1]
             equip = command.split(" ", 1)[1]
             equip_item(equip, player, rooms, items, enemies)
         except Exception:
@@ -345,6 +367,8 @@ def input_parser(cmd_in, player, rooms, items, enemies):
         print("Your backpack contains:")
         for i in player["inventory"]:
             print(f"{i}: {items[i]['flavor']}")
+        print(f"Weapon: {player['weapon']}, Armor: {player['armor']}")
+        print(f"HP: {player['hp']}/{player['max_hp']}, Coins: {player['coins']}")
 
     elif command.startswith("go"):
         try:
@@ -358,6 +382,7 @@ def input_parser(cmd_in, player, rooms, items, enemies):
 
     elif command.startswith("attack"):
         try:
+            target = command.split(" ", 1)[1]
             target = command.split(" ", 1)[1]
             attack(target, player, rooms, items, enemies)
         except Exception:
@@ -389,6 +414,7 @@ def input_parser(cmd_in, player, rooms, items, enemies):
     else:
         print(f"I don't understand. {fail[1]}")
 
+
 def game_loop(player, rooms, items, enemies):
     first_time = True
     while True:
@@ -396,14 +422,18 @@ def game_loop(player, rooms, items, enemies):
         if first_time:
             first_time = False
             print(f"You are in {rooms[location]['flavor'].lower()}")
+            print("")
             print(rooms[player["location"]]["text"])
             for i in rooms[player["location"]]["items"]:
                 print(f"There is a {i} here. {items[i]['flavor']}")
+            print("")
             for i in rooms[player["location"]]["exits"]:
                 index = rooms[player["location"]]["exits"][i]
                 print(f"To your {i}: {rooms[index]['flavor']}")
+                print(f"To your {i}: {rooms[index]['flavor']}")
 
         command = input("\n...> ")
+        input_parser(command, player, rooms, items, enemies)
         input_parser(command, player, rooms, items, enemies)
         if player["location"] != location:
             first_time = True
@@ -416,6 +446,7 @@ def main():
     print("Welcome to Greednought!")
     print("Type help if you need assistance.\n")
     game_loop(player, rooms, items, enemies)
+
 
 if __name__ == "__main__":
     main()
