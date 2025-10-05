@@ -16,7 +16,7 @@ def init_game():
         "location": "spawn",
         "coins": 60,
         "inventory": [],
-        "battle": "",
+        "battle": [],
         "weapon": "fists",
         "armor": "clothes",
         "min_dmg": 3,
@@ -209,6 +209,7 @@ def help():
           "inventory/inv: View your backpack \n"
           "go north/east/south/west/up/down: Move around \n"
           "attack creature: Swing at a creature \n"
+          "attack: Type alone to get a battle overview \n"
           "run: Escape a battle \n"
           "win: Naturally... \n"
           "quit: Why would you ever want to do that?"
@@ -222,6 +223,8 @@ def get_item(item, player, rooms, items, enemies):
         print(f"Picked up a {items[item]['name']}.")
     else:
         print(f"You can't see any {item} here")
+    
+    enemy_phase(player, rooms, items, enemies)
 
 
 def use_item(item, player, rooms, items, enemies):
@@ -240,6 +243,7 @@ def use_item(item, player, rooms, items, enemies):
     else:
         print("You can't use this item! Try 'equip'ping it?")
 
+    enemy_phase(player, rooms, items, enemies)
 
 def drop_item(item, player, rooms, items, enemies):
     if item in player["inventory"]:
@@ -254,7 +258,8 @@ def drop_item(item, player, rooms, items, enemies):
         print(f"You dropped the {items[item]['name']}.")
     else:
         print("You don't have that item.")
-
+        
+    enemy_phase(player, rooms, items, enemies)
 
 def equip_item(item, player, rooms, items, enemies):
     if item not in items:
@@ -273,6 +278,8 @@ def equip_item(item, player, rooms, items, enemies):
         print(f"Equipped your {items[item]['name']}.")
     else:
         print("That's not armor or a weapon. Maybe you meant to 'use' this?")
+        
+    enemy_phase(player, rooms, items, enemies)
 
 def describe_room(location, player, rooms, items, enemies):
     print(f"You are in {rooms[location]['flavor'].lower()}\n")
@@ -300,51 +307,88 @@ def move_player(direction, player, rooms, items, enemies):
     next_room = rooms[location]["exits"][direction]
     player["location"] = next_room
     print(f"You move {direction}.")
-    
     describe_room(next_room, player, rooms, items, enemies)
     
-    if rooms[next_room]["enemies"]:
-        enemy = rooms[next_room]["enemies"][0]
-        player["battle"] = enemy
-        print(f"\nA {enemies[enemy]['name']} appears! {enemies[enemy]['flavor']}")
-        
+    base_enemies = rooms[next_room].get("enemies", [])
+    if base_enemies:
+        rooms[next_room]["active_enemies"] = []
+        for i, enemy_type in enumerate(base_enemies):
+            inst = {
+                "id": f"{enemy_type}_{i+1}",
+                "type": enemy_type,
+                "hp": enemies[enemy_type]["hitpoints"]
+            }
+            rooms[next_room]["active_enemies"].append(inst)
+            
+        player["battle"] = rooms[next_room]["active_enemies"]
+        for i in player["battle"]:
+            print(f"- A {enemies[i['type']]['name']} appears! {enemies[i['type']]['flavor']} [{i['id']}]")
+    else:
+        rooms[next_room]["active_enemies"] = []
+        player["battle"] = []
+    
 def attack(target_name, player, rooms, items, enemies):
-    if player["battle"] == "":
-        print("There is nothing here to fight!")
+    if not player["battle"]:
+        print("You aren't in combat.")
         return
-    enemy = player["battle"]
-    if target_name != enemy:
+    
+    if target_name.strip() == "":
+        print("Enemies present:")
+        for e in player["battle"]:
+            etype = enemies[e["type"]]
+            print(f"- {etype['name']} (HP: {e['hp']}) [{e['id']}]")
+        return
+    
+    target = None
+    for e in player["battle"]:
+        if target_name == e["id"] or target_name == e["type"]:
+            target = e
+            break
+    if not target:
         print(f"There is no {target_name} here")
         return
     
     dmg = random.randint(player["min_dmg"], player["max_dmg"])
-    enemies[enemy]["hitpoints"] -= dmg
-    print(f"You strike the {enemies[enemy]['name']} for {dmg} damage.")
+    target["hp"] -= dmg
+    print(f"You strike the {enemies[target['type']]['name']} ({target['id']}) for {dmg} damage.")
     
-    if enemies[enemy]["hitpoints"] <= 0:
-        print(f"You defeated the {enemies[enemy]["name"]}.")
-        drops = enemies[enemy]["drops"]
+    if target["hp"] <= 0:
+        print(f"You defeat the {enemies[target['type']]['name']} ({target['id']}).")
+        drops = enemies[target['type']]['drops']
         if drops:
             print(f"It dropped: {', '.join(d for d in drops)}")
             for drop in drops:
                 rooms[player["location"]]["items"].append(drop)
-        player["battle"] = ""
-        return
-    
-    if random.random() < 0.75:
-        print(f"{enemies[enemy]['attacktext']}{enemies[enemy]["damage"]} damage!")
-        player["hp"] -= enemies[enemy]["damage"]
-        if player["hp"] <= 0:
-            print(enemies[enemy]['killtext'])
-            sys.exit(0)
-    
-    else:
-        print(enemies[enemy]["misstext"])
+        player["battle"].remove(target)
         
-def run(player, rooms, items, enemies):
-    if player["battle"] == "":
-        print("You aren't in combat.")
+    enemy_phase(player, rooms, items, enemies)
+
+def enemy_phase(player, rooms, items, enemies):
+    if not player["battle"]:
         return
+    
+    total_damage = 0
+    for e in list(player["battle"]): # make a copy to avoid it changing?
+        etype = enemies[e["type"]]
+        if e["hp"] > 0:
+            if random.random() < 0.75:
+                dmg = etype["damage"]
+                total_damage += dmg
+                print(f"{etype['attacktext']}{dmg} damage! ({e['id']})")
+                player["hp"] -= dmg
+                if player["hp"] <= 0:
+                    print(etype['killtext'])
+                    sys.exit(0)
+            else:
+                print(f"{etype["misstext"]} ({e["id"]})")
+                
+    if total_damage > 0:
+        print(f"Player: [{player["hp"]}/{player["max_hp"]}]")
+
+def run(player, rooms, items, enemies):
+    if not player["battle"]:
+        print("There is nothing to run from.")
+        
     if random.random() < 0.5:
         print("You successfully escape!")
         player["battle"] = ""
@@ -397,6 +441,9 @@ def input_parser(cmd_in, player, rooms, items, enemies):
         
     elif command.startswith("get") or command.startswith("take"):
         try:
+            if command == "get" or command == "get ":
+                print("What are you trying to get?")
+                return
             get = command.split(" ", 1)[1]
             get_item(get, player, rooms, items, enemies)
         except Exception:
@@ -404,6 +451,9 @@ def input_parser(cmd_in, player, rooms, items, enemies):
 
     elif command.startswith("use"):
         try:
+            if command == "use" or command == "use ":
+                print("What are you trying to use?")
+                return
             use = command.split(" ", 1)[1]
             use_item(use, player, rooms, items, enemies)
         except Exception:
@@ -411,6 +461,9 @@ def input_parser(cmd_in, player, rooms, items, enemies):
 
     elif command.startswith("drop"):
         try:
+            if command == "drop" or command == "drop ":
+                print("Drop what?")
+                return
             drop = command.split(" ", 1)[1]
             drop_item(drop, player, rooms, items, enemies)
         except Exception:
@@ -418,6 +471,9 @@ def input_parser(cmd_in, player, rooms, items, enemies):
 
     elif command.startswith("equip"):
         try:
+            if command == "equip" or command == "equip ":
+                print("Equip what?")
+                return
             equip = command.split(" ", 1)[1]
             equip_item(equip, player, rooms, items, enemies)
         except Exception:
@@ -425,6 +481,9 @@ def input_parser(cmd_in, player, rooms, items, enemies):
 
     elif command.startswith("examine"):
         try:
+            if command == "examine" or command == "exmaine ":
+                print("What are you examining?")
+                return
             item = command.split(" ", 1)[1]
             if item in player["inventory"]:
                 print(f"It's a {items[item]['name']}.")
@@ -443,23 +502,20 @@ def input_parser(cmd_in, player, rooms, items, enemies):
             print(f"{i}: {items[i]['flavor']}")
 
     elif command.startswith("go"):
-        try:
-            direction = command.split(" ", 1)[1]
-            if player["battle"] == "":
-                move_player(direction, player, rooms, items, enemies)
-            else:
-                print("You can't just leave, you're in a fight!\n")
-        except Exception:
-            print(fail[1])
+        if command == "go" or command == "go ":
+                print("I can't tell where you want to go.")
+                return
+        direction = command.split(" ", 1)[1]
+        if not player["battle"]:
+            move_player(direction, player, rooms, items, enemies)
+        else:
+            print("You can't just leave, you're in a fight!\n")
 
     elif command.startswith("attack"):
-        try:
-            target = command.split(" ", 1)[1]
-            target = command.split(" ", 1)[1]
-            attack(target, player, rooms, items, enemies)
-        except Exception:
-            print(fail[1])
-
+        parts = command.split(" ", 1)
+        target = parts[1] if len(parts) > 1 else ""
+        attack(target, player, rooms, items, enemies)
+            
     elif command == "run":
         run(player, rooms, items, enemies)
 
@@ -486,7 +542,6 @@ def input_parser(cmd_in, player, rooms, items, enemies):
     else:
         print(f"I don't understand. {fail[1]}")
 
-
 def game_loop(player, rooms, items, enemies):
     first_time = True
     while True:
@@ -508,7 +563,6 @@ def main():
     print("Type help if you need assistance.\n")
     describe_room(player["location"], player, rooms, items, enemies)
     game_loop(player, rooms, items, enemies)
-
 
 if __name__ == "__main__":
     main()

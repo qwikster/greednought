@@ -1,11 +1,10 @@
 [project]
 name = "greednought"
-version = "0.1.0"
+version = "0.1.1"
 description = "A text adventure game created for Week 5 of Hack Club's Siege"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = [
-]
+dependencies = []
 license = "GPL-3.0-only"
 license-files = ["LICENSE"]
 
@@ -14,7 +13,7 @@ requires = ["uv_build >= 0.7.19, <0.9.0"]
 build-backend = "uv_build"
 
 [project.scripts]
-liminity = "greednought.greednought:main"
+greednought = "greednought.greednought:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
