@@ -59,8 +59,72 @@ def init_game():
             "items": [],
             "enemies": []
         },
+        "entrance2": {
+            "flavor": "More cave, getting narrower as you continue.",
+            "text": "As you continue down the cave, it begins to shrink. As it gets\n"
+                    "even tighter, you eventually have to crawl on your hands and\n"
+                    "knees to make it through, but it finally widens. After it widens,\n"
+                    "you can see that it's been intentionally hollowed out.",
+            "exits": {
+                "west": "gamble",
+                "north": "pit",
+                "south": "entrance"
+                },
+            "items": [],
+            "enemies": []
+        },
+        "gamble": {
+            "flavor": "An aging room styled like a '70s diner.",
+            "text": "You enter the room. It looks straight out of an old black-and-white\n"
+                    "poorly produced sitcom, which you're not sure if it is a good or a\n"
+                    "bad thing. Multiple people sit in time-appropriate outfits, playing\n"
+                    "cards or other various games at booth tables and eating food that\n"
+                    "looks like sand.",
+            "exits": {
+                "east": "entrance2",
+                "down": "gamblebasement"
+            },
+            "items": ["brandy"],
+            "enemies": []
+        },
+        "gamblebasement": {
+            "flavor": "The dingy basement of a '70s diner.",
+            "text": "It's filled with questionably sanitary food storage racks. Nobody\n"
+                    "is down here at the moment, but it's clearly a well-used area.\n"
+                    "However, the pest control measures of the time are made very\n"
+                    "obvious.",
+            "exits": {
+                "up": "gamble"
+            },
+            "items": ["rottentomato"],
+            "enemies": ["rat", "rat", "rat", "rat", "rat"]
+        },
+        "pit": {
+            "flavor": "A pit.",
+            "text": "You can see the bottom, and there's no way around it. What might\n"
+                    "be down here is anyone's guess. Its edges are very rough, and you\n"
+                    "will have to be careful to not tear your clothes up.",
+            "exits": {
+                "south": "entrance2",
+            }
+        }
     }
     items = {
+        "brandy": {
+            "name": "Aged Brandy",
+            "flavor": "It's some low quality brandy left in a cabinet for decades",
+            "type": "potion",
+            "description": "This would likely be worth some decent coin if sold to\n"
+                           "understood the worth of aged alcohol, especially with this\n"
+                           "much time put in. Quite a rare find."
+        },
+        "rottentomato": {
+            "name": "Rotten, moldy tomato",
+            "flavor": "A tomato that clearly hasn't been touched for months.",
+            "type": "junk",
+            "description": "This further confirms your suspicion that whoever lives\n"
+                           "here REALLY doesn't understand modern food safety laws."
+        },
         "moldybaguette": {
             "name": "Moldy Baguette",
             "flavor": "It's been here for two or three weeks.",
@@ -119,6 +183,16 @@ def init_game():
             "killtext": "You have been eaten by a Grue",
             "flavor": "It's just doing grue things.",
             "drops": ["gruehair", "gruepaw", "grueshield"]
+        },
+        "rat": {
+            "name": "Rat",
+            "hitpoints": 5,
+            "attacktext": "The rat bit your shin while you weren't looking, dealing ",
+            "misstext": "The rat closes its teeth on thin air",
+            "damage": 2,
+            "killtext": "The rat overwhelms you and knocks you over.",
+            "flavor": "It's perusing the rotten tomatoes.",
+            "drops": []
         }
     }
     return player, rooms, items, enemies
@@ -145,7 +219,7 @@ def get_item(item, player, rooms, items, enemies):
     if item in rooms[player["location"]]["items"]:
         player["inventory"].append(item)
         rooms[player["location"]]["items"].remove(item)
-        print(f"Picked up a {items[item]['name']}. {items[item]['flavor']}")
+        print(f"Picked up a {items[item]['name']}.")
     else:
         print(f"You can't see any {item} here")
 
@@ -155,9 +229,9 @@ def use_item(item, player, rooms, items, enemies):
         print("That item does not exist.")
         return
     if items[item]["type"] == "potion":
-        if item == "healthpotion":
+        if item == "brandy":
             player["hp"] = min(player["hp"] + 10, player["max_hp"])
-            print("You heal for 10 HP.")
+            print("The brandy stings the inside of your mouth and heals you for 15 HP.")
             player["inventory"].remove(item)
         elif item == "poisonpotion":
             player["hp"] -= 10
@@ -190,14 +264,9 @@ def equip_item(item, player, rooms, items, enemies):
         player["weapon"] = item
         player["min_dmg"] = items[item]["min_dmg"]
         player["max_dmg"] = items[item]["max_dmg"]
-        player["min_dmg"] = items[item]["min_dmg"]
-        player["max_dmg"] = items[item]["max_dmg"]
         print(f"Equipped your {items[item]['name']}.")
     elif items[item]["type"] == "armor":
         player["armor"] = item
-        player["max_hp"] = items[item]["hp"]
-        if player["hp"] > player["max_hp"]:
-            player["hp"] = player["max_hp"]
         player["max_hp"] = items[item]["hp"]
         if player["hp"] > player["max_hp"]:
             player["hp"] = player["max_hp"]
@@ -205,55 +274,73 @@ def equip_item(item, player, rooms, items, enemies):
     else:
         print("That's not armor or a weapon. Maybe you meant to 'use' this?")
 
-
+def describe_room(location, player, rooms, items, enemies):
+    print(f"You are in {rooms[location]['flavor'].lower()}\n")
+    print(rooms[location]["text"])
+    
+    if rooms[location]["items"]:
+        for i in rooms[location]["items"]:
+            print(f"There is a {i} here. {items[i]["flavor"]}")
+    print("")
+    
+    for direction, target in rooms[location]["exits"].items():
+        if direction == "up":
+            print(f"Above you: {rooms[target]["flavor"]}")
+        elif direction == "down":
+            print(f"Below you: {rooms[target]["flavor"]}")
+        else:
+            print(f"To your {direction}: {rooms[target]["flavor"]}")
+        
 def move_player(direction, player, rooms, items, enemies):
     location = player["location"]
     if direction not in rooms[location]["exits"]:
         print("You can't go that way.")
         return
+    
     next_room = rooms[location]["exits"][direction]
     player["location"] = next_room
-    print(f"You move {direction} into {rooms[next_room]['flavor'].lower()}")
-    print("")
-    print(rooms[next_room]["text"])
-    for i in rooms[next_room]["items"]:
-        print(f"There is a {i} here. {items[i]['flavor']}")
+    print(f"You move {direction}.")
+    
+    describe_room(next_room, player, rooms, items, enemies)
+    
     if rooms[next_room]["enemies"]:
         enemy = rooms[next_room]["enemies"][0]
         player["battle"] = enemy
-        print(f"A {enemies[enemy]['name']} appears! {enemies[enemy]['flavor']}")
-
-
+        print(f"\nA {enemies[enemy]['name']} appears! {enemies[enemy]['flavor']}")
+        
 def attack(target_name, player, rooms, items, enemies):
     if player["battle"] == "":
-        print("There is nothing to fight.")
+        print("There is nothing here to fight!")
         return
     enemy = player["battle"]
     if target_name != enemy:
-        print(f"There is no {target_name} here.")
+        print(f"There is no {target_name} here")
         return
-
+    
     dmg = random.randint(player["min_dmg"], player["max_dmg"])
     enemies[enemy]["hitpoints"] -= dmg
     print(f"You strike the {enemies[enemy]['name']} for {dmg} damage.")
-
+    
     if enemies[enemy]["hitpoints"] <= 0:
-        print(f"You defeated the {enemies[enemy]['name']}!")
-        for drop in enemies[enemy]["drops"]:
-            rooms[player["location"]]["items"].append(drop)
+        print(f"You defeated the {enemies[enemy]["name"]}.")
+        drops = enemies[enemy]["drops"]
+        if drops:
+            print(f"It dropped: {', '.join(d for d in drops)}")
+            for drop in drops:
+                rooms[player["location"]]["items"].append(drop)
         player["battle"] = ""
         return
-
+    
     if random.random() < 0.75:
-        print(f"{enemies[enemy]['attacktext']}{enemies[enemy]['damage']} damage!")
+        print(f"{enemies[enemy]['attacktext']}{enemies[enemy]["damage"]} damage!")
         player["hp"] -= enemies[enemy]["damage"]
         if player["hp"] <= 0:
-            print(enemies[enemy]["killtext"])
+            print(enemies[enemy]['killtext'])
             sys.exit(0)
+    
     else:
         print(enemies[enemy]["misstext"])
-
-
+        
 def run(player, rooms, items, enemies):
     if player["battle"] == "":
         print("You aren't in combat.")
@@ -272,7 +359,6 @@ def run(player, rooms, items, enemies):
                 sys.exit(0)
         else:
             print(enemies[enemy]["misstext"])
-
 
 def check_location(location, player, rooms, items, enemies):
     if location == "tavern":
@@ -307,19 +393,10 @@ def input_parser(cmd_in, player, rooms, items, enemies):
         help()
 
     elif command == "look":
-        print(f"You are in {rooms[player['location']]['flavor'].lower()}")
-        print(rooms[player["location"]]["text"])
-        for i in rooms[player["location"]]["items"]:
-            print(f"There is a {i} here. {items[i]['flavor']}")
-        print("")
-        for i in rooms[player["location"]]["exits"]:
-            index = rooms[player["location"]]["exits"][i]
-            print(f"To your {i}: {rooms[index]['flavor']}")
-            print(f"To your {i}: {rooms[index]['flavor']}")
-
+        describe_room(player["location"], player, rooms, items, enemies)
+        
     elif command.startswith("get") or command.startswith("take"):
         try:
-            get = command.split(" ", 1)[1]
             get = command.split(" ", 1)[1]
             get_item(get, player, rooms, items, enemies)
         except Exception:
@@ -328,7 +405,6 @@ def input_parser(cmd_in, player, rooms, items, enemies):
     elif command.startswith("use"):
         try:
             use = command.split(" ", 1)[1]
-            use = command.split(" ", 1)[1]
             use_item(use, player, rooms, items, enemies)
         except Exception:
             print(fail[1])
@@ -336,14 +412,12 @@ def input_parser(cmd_in, player, rooms, items, enemies):
     elif command.startswith("drop"):
         try:
             drop = command.split(" ", 1)[1]
-            drop = command.split(" ", 1)[1]
             drop_item(drop, player, rooms, items, enemies)
         except Exception:
             print(fail[1])
 
     elif command.startswith("equip"):
         try:
-            equip = command.split(" ", 1)[1]
             equip = command.split(" ", 1)[1]
             equip_item(equip, player, rooms, items, enemies)
         except Exception:
@@ -367,8 +441,6 @@ def input_parser(cmd_in, player, rooms, items, enemies):
         print("Your backpack contains:")
         for i in player["inventory"]:
             print(f"{i}: {items[i]['flavor']}")
-        print(f"Weapon: {player['weapon']}, Armor: {player['armor']}")
-        print(f"HP: {player['hp']}/{player['max_hp']}, Coins: {player['coins']}")
 
     elif command.startswith("go"):
         try:
@@ -421,19 +493,8 @@ def game_loop(player, rooms, items, enemies):
         location = str(player["location"])
         if first_time:
             first_time = False
-            print(f"You are in {rooms[location]['flavor'].lower()}")
-            print("")
-            print(rooms[player["location"]]["text"])
-            for i in rooms[player["location"]]["items"]:
-                print(f"There is a {i} here. {items[i]['flavor']}")
-            print("")
-            for i in rooms[player["location"]]["exits"]:
-                index = rooms[player["location"]]["exits"][i]
-                print(f"To your {i}: {rooms[index]['flavor']}")
-                print(f"To your {i}: {rooms[index]['flavor']}")
 
         command = input("\n...> ")
-        input_parser(command, player, rooms, items, enemies)
         input_parser(command, player, rooms, items, enemies)
         if player["location"] != location:
             first_time = True
@@ -445,6 +506,7 @@ def main():
     player, rooms, items, enemies = init_game()
     print("Welcome to Greednought!")
     print("Type help if you need assistance.\n")
+    describe_room(player["location"], player, rooms, items, enemies)
     game_loop(player, rooms, items, enemies)
 
 
