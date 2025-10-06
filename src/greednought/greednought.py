@@ -106,15 +106,443 @@ def init_game():
                     "will have to be careful to not tear your clothes up.",
             "exits": {
                 "south": "entrance2",
+                "down": "gate"
             }
+        },
+        "gate": {
+            "flavor": "A rusted shut gate at the bottom of a pit",
+            "text": "The gate lists a myriad of prices in languages you do not know,\n"
+                    "but near the bottom it lists 5 coins as the price of entry. An\n"
+                    "automated machine accepts your coins and lets you through.\n"
+                    "It appears it was impossible to climb out of the pit anyways.\n"
+                    "(-5 Coins)",
+            "exits": {
+                "south": "doors"
+            },
+            "items": ["datestamp"]
+        },
+        "doors": {
+            "flavor": "A set of three doors, guarded by clockwork puppets.",
+            "text": "Three robotic puppets stand in front of their respective doors.\n"
+                    "They're all clearly different, but you can't tell which door might\n"
+                    "lead where. A sign on a wall reads where they lead, but not which-\n"
+                    " TRUTH - DEATH - LIES.",
+            "exits": {
+                "south": "death",
+                "west": "truth",
+                "east": "lies"
+                },
+            "items": []
+        },
+        "death": {
+            "flavor": "An ornate, antique wooden door.",
+            "text": "As you walk through the ornate door, your hand sticks to the doorknob.\n"
+                    "As you struggle to pull it off, there is a rumbling from inside the\n"
+                    "tunnel within, getting louder, but your hand only sticks more. The\n"
+                    "noise reaches a crescendo and finally a tidal wave of locusts covers\n"
+                    "your face and nose, suffocating you and leaving you to perish in the\n"
+                    "room. A set of robots comes through to clean the room again, but the\n"
+                    "life has already left your eyes.",
+            "exits": {},
+            "items": []
+        },
+        "truth": {
+            "flavor": "An incredibly heavy pure-white marble door.",
+            "text": "You walk through into a similarly bright marble tunnel and the door locks\n"
+                    "behind you. No threats appear to exist in this tunnel, and you even find \n"
+                    "a small cabinet tucked away in the wall. It ends with a similar door.",
+            "exits": {
+                "south": "mud"
+            },
+            "items": ["brandy"]
+        },
+        "lies": {
+            "flavor": "A door absolutely covered in vines. Not threatening, but very natural.",
+            "text": "The door has no doorknob on the inside, but you step inside anyway. \n"
+                    "As you walk down the tunnel, it's poorly lit, but it's kind of nice\n"
+                    "in some post-brutalist way. A single rat's nest is visible, and you\n"
+                    "make it through with almost no trouble.",
+            "exits": {
+                "east": "pain",
+                "south": "illusion"
+            },
+            "items": [],
+            "enemies": ["rat"],
+        },
+        "pain": {
+            "flavor": "The tunnel continues and gets muddier, almost warning you.",
+            "text": "",
+            "exits": {
+                "west": "lies",
+                "east": "noreturn",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "noreturn": {
+            "flavor": "The tunnel opens up, is very muddy, and contains many weeds and puddles.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "west": "pain",
+                "east": "freepassage"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "freepassage": {
+            "flavor": "A ladder that will collapse if you climb down it, blocking return.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "down": "sewers",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "sewers": {
+            "flavor": "The sewers, not used for a while, but still gross.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "west": "antechamber",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "illusion": {
+            "flavor": "A haze blocks you from seeing or knowing what is ahead.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "lies",
+                "south": "snakes"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "snakes": {
+            "flavor": "A tunnel plain with many small burrows in the earthy clay ground.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "illusion",
+                "south": "beehive"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "beehive": {
+            "flavor": "A muddy field with flowers everywhere.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "snakes",
+                "south": "elevator"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "mud": {
+            "flavor": "A room full of 2-foot deep mud, but it looks incredibly pure...?",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "truth",
+                "south": "rockfall"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "rockfall": {
+            "flavor": "A chamber with a collapsed ceiling.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "mud",
+                "east": "swordstone"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "swordstone": {
+            "flavor": "The chamber turns to roman architecture, a single stone in the centre.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "south": "drawings",
+                "west": "rockfall"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "drawings": {
+            "flavor": "A Roman room full of incomprehensible diagrams and drawings.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "swordstone",
+                "south": "gambleturtle"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "gambleturtle": {
+            "flavor": "A very small room containing a single turtle",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "drawings",
+                "west": "bossfight"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "bossfight": {
+            "flavor": "A very clearly hostile arena. Don't go here if you don't want a fight.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "east": "gambleturtle",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "elevator": {
+            "flavor": "An elevator.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "down": "collapsedmine",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "collapsedmine": {
+            "flavor": "A mineshaft with a collapsed ceiling.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "south": "office", 
+            },
+            "items": [],
+            "enemies": []
+        },
+        "office": {
+            "flavor": "An office clearly designed to get work and not play done.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "collapsedmine",
+                "west": "refinery",
+                "east": "robotguards" 
+            },
+            "items": [],
+            "enemies": []
+        },
+        "refinery": {
+            "flavor": "Belts and furnaces where ore once was refined into pure gold.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "east": "office",
+                "south": "smeltery"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "smeltery": {
+            "flavor": "Molten gold continues to flow in circles in eroded channels.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "refinery",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "barracks": {
+            "flavor": "Half-buried miner's bunks, not designed for comfort",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "office",
+                "south": "airvent"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "airvent": {
+            "flavor": "A vent leading straight downwards with a wide grate over it.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "barracks",
+                "down": "shrine"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "shrine": {
+            "flavor": "A room containing a hill with a shrine of some kind on it.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "up": "airvent",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "robotguards": {
+            "flavor": "Multiple humanoid robotic sentries guard a door.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "west": "office",
+                "south": "cranklift",
+                "east": "stream"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "stream": {
+            "flavor": "Water flows over a bed of immovable rocks with cracks in them",
+            "text": "\n"
+                    "",
+            "exits": {
+                "west": "robotguards",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "cranklift": {
+            "flavor": "A crank-operated mine elevator.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "north": "robotguards",
+                "down": "antechamber"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "antechamber": {
+            "flavor": "Walls engraved with endless dollar symbols. How vain.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "south": "hall",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "hall": {
+            "flavor": "The antechamber continues into a hall.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "west": "shrines",
+                "south": "grueboss",
+                "east": "garden"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "shrines": {
+            "flavor": "Many tiny shrines on their own little pedestals, like a cemetary.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "down": "treasury",
+                "east": "hall"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "treasury": {
+            "flavor": "A huge vault door.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "up": "shrines",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "garden": {
+            "flavor": "A garden of many fruits.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "east": "hall",
+                "west": "echoes"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "echoes": {
+            "flavor": "A cubic room completely devoid of anything but a thick haze.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "west": "garden",
+                "down": "heart"
+            },
+            "items": [],
+            "enemies": []
+        },
+        "heart": {
+            "flavor": "A room almost adorned with veins in the walls.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "up": "echoes",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "grueboss": {
+            "flavor": "Another obvious arena - this time in your path.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "south": "toll",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "toll": {
+            "flavor": "Two massive, fortified gates.",
+            "text": "\n"
+                    "",
+            "exits": {
+                "south": "victory",
+            },
+            "items": [],
+            "enemies": []
+        },
+        "victory": {
+            "flavor": "Your victory!",
+            "text": "\n"
+                    "",
+            "exits": {},
+            "items": [],
+            "enemies": []
         }
     }
     items = {
+        "datestamp": {
+            "name": "Rotating date stamp",
+            "flavor": "It's one of those rotating stamp things you find at the bank.",
+            "type": "junk",
+            "description": "Clearly used many times, but now abandoned. It's completely\n"
+                           "dried out - you won't be able to use it any time soon."
+            },
         "brandy": {
             "name": "Aged Brandy",
             "flavor": "It's some low quality brandy left in a cabinet for decades",
             "type": "potion",
-            "description": "This would likely be worth some decent coin if sold to\n"
+            "description": "This would likely be worth some decent coin if sold to one who\n"
                            "understood the worth of aged alcohol, especially with this\n"
                            "much time put in. Quite a rare find."
         },
@@ -287,16 +715,16 @@ def describe_room(location, player, rooms, items, enemies):
     
     if rooms[location]["items"]:
         for i in rooms[location]["items"]:
-            print(f"There is a {i} here. {items[i]["flavor"]}")
+            print(f"There is a {i} here. {items[i]['flavor']}")
     print("")
     
     for direction, target in rooms[location]["exits"].items():
         if direction == "up":
-            print(f"Above you: {rooms[target]["flavor"]}")
+            print(f"Above you: {rooms[target]['flavor']}")
         elif direction == "down":
-            print(f"Below you: {rooms[target]["flavor"]}")
+            print(f"Below you: {rooms[target]['flavor']}")
         else:
-            print(f"To your {direction}: {rooms[target]["flavor"]}")
+            print(f"To your {direction}: {rooms[target]['flavor']}")
         
 def move_player(direction, player, rooms, items, enemies):
     location = player["location"]
@@ -360,6 +788,7 @@ def attack(target_name, player, rooms, items, enemies):
             for drop in drops:
                 rooms[player["location"]]["items"].append(drop)
         player["battle"].remove(target)
+        rooms[player['location']][enemies].remove(target['type'])
         
     enemy_phase(player, rooms, items, enemies)
 
@@ -380,10 +809,10 @@ def enemy_phase(player, rooms, items, enemies):
                     print(etype['killtext'])
                     sys.exit(0)
             else:
-                print(f"{etype["misstext"]} ({e["id"]})")
+                print(f"{etype['misstext']} ({e['id']})")
                 
     if total_damage > 0:
-        print(f"Player: [{player["hp"]}/{player["max_hp"]}]")
+        print(f"Player: [{player['hp']}/{player['max_hp']}]")
 
 def run(player, rooms, items, enemies):
     if not player["battle"]:
@@ -391,18 +820,10 @@ def run(player, rooms, items, enemies):
         
     if random.random() < 0.5:
         print("You successfully escape!")
-        player["battle"] = ""
-    else:
-        print("You failed to escape!")
-        enemy = player["battle"]
-        if random.random() < 0.75:
-            print(f"{enemies[enemy]['attacktext']}{enemies[enemy]['damage']} damage!")
-            player["hp"] -= enemies[enemy]["damage"]
-            if player["hp"] <= 0:
-                print(enemies[enemy]["killtext"])
-                sys.exit(0)
-        else:
-            print(enemies[enemy]["misstext"])
+        player["battle"] = []
+    
+    print("You failed to escape.")
+    enemy_phase(player, rooms, items, enemies)
 
 def check_location(location, player, rooms, items, enemies):
     if location == "tavern":
@@ -481,7 +902,7 @@ def input_parser(cmd_in, player, rooms, items, enemies):
 
     elif command.startswith("examine"):
         try:
-            if command == "examine" or command == "exmaine ":
+            if command == "examine" or command == "examine ":
                 print("What are you examining?")
                 return
             item = command.split(" ", 1)[1]
