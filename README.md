@@ -15,3 +15,6 @@ This was done for Week 5 of Hack Club's https://siege.hackclub.com/ .
 
 I... have no idea what else to put here. If you'd like to see a full map of the game (SPOILERS!!!!!) you may view it here:
 https://docs.google.com/spreadsheets/d/1Sx7_NewRofRFaFdDXNJEN3AlVnFKw2jPY1nu6lTMaI4/
+
+## demo
+https://github.com/user-attachments/assets/e8d2322e-3cd8-4290-96df-93e826c3b0db
