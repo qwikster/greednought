@@ -171,7 +171,8 @@ def init_game():
         },
         "pain": {
             "flavor": "The tunnel continues and gets muddier, almost warning you.",
-            "text": "",
+            "text": "You're not sure as to what this tunnel even contains. To your\n"
+                    "side scares you deeply, but the next room isn't much better.",
             "exits": {
                 "west": "lies",
                 "east": "noreturn",
@@ -181,8 +182,9 @@ def init_game():
         },
         "noreturn": {
             "flavor": "The tunnel opens up, is very muddy, and contains many weeds and puddles.",
-            "text": "\n"
-                    "",
+            "text": "Past this point, you don't think you'll be able to return to the\n"
+                    "tunnel before - and you're not sure if that's a good thing. As you\n"
+                    "continue to walk, something stings your leg but gets away.",
             "exits": {
                 "west": "pain",
                 "east": "freepassage"
@@ -192,8 +194,9 @@ def init_game():
         },
         "freepassage": {
             "flavor": "A ladder that will collapse if you climb down it, blocking return.",
-            "text": "\n"
-                    "",
+            "text": "The ladder disintegrates into flakes of rust, irritating your eyes\n"
+                    "as you climb down in to the dark. You can tell you've passed some\n"
+                    "other area - whether that's good or bad, you don't know.",
             "exits": {
                 "down": "sewers",
             },
@@ -202,8 +205,10 @@ def init_game():
         },
         "sewers": {
             "flavor": "The sewers, not used for a while, but still gross.",
-            "text": "\n"
-                    "",
+            "text": "It appears you've climbed down into at least somewhat of a civilized\n"
+                    "area, much nicer than just a cave. It leads into a room, but you're\n"
+                    "effectively in the toilet for hundreds of miners, years ago. The stench\n"
+                    "is barely survivable.",
             "exits": {
                 "west": "antechamber",
             },
@@ -212,8 +217,10 @@ def init_game():
         },
         "illusion": {
             "flavor": "A haze blocks you from seeing or knowing what is ahead.",
-            "text": "\n"
-                    "",
+            "text": "You see nothing. You thought you saw many creatures and almost got hold\n"
+                    "of them, but did not. You thought you saw coins littered around the\n"
+                    "ground, but your hand passed through them. Everything is shifting as if\n"
+                    "you were melting in to the earth, but eventually you pass.",
             "exits": {
                 "north": "lies",
                 "south": "snakes"
@@ -222,31 +229,32 @@ def init_game():
             "enemies": []
         },
         "snakes": {
-            "flavor": "A tunnel plain with many small burrows in the earthy clay ground.",
-            "text": "\n"
-                    "",
+            "flavor": "A tunnel - plain with many small burrows in the earthy clay ground.",
+            "text": "Snakes appear from the holes as you walk dizzily into the room.\n"
+                    "Most don't want to cause harm, but one snake really wants blood.",
             "exits": {
                 "north": "illusion",
                 "south": "beehive"
             },
             "items": [],
-            "enemies": []
+            "enemies": ["cobra"]
         },
         "beehive": {
             "flavor": "A muddy field with flowers everywhere.",
-            "text": "\n"
-                    "",
+            "text": "Bees swarm everywhere, collecting pollen from the flowers. It's a nice\n"
+                    "change from the snakes, and you pause for a bit. It's safe here, despite\n"
+                    "the fact that bees are somehow living and thriving underground.",
             "exits": {
                 "north": "snakes",
                 "south": "elevator"
             },
-            "items": [],
+            "items": ["honey"],
             "enemies": []
         },
         "mud": {
             "flavor": "A room full of 2-foot deep mud, but it looks incredibly pure...?",
-            "text": "\n"
-                    "",
+            "text": "You wade through the mud and even happen to find 5 coins buried in it.\n"
+                    "You have... no clue as to how they got here, but not complaining.",
             "exits": {
                 "north": "truth",
                 "south": "rockfall"
@@ -256,8 +264,9 @@ def init_game():
         },
         "rockfall": {
             "flavor": "A chamber with a collapsed ceiling.",
-            "text": "\n"
-                    "",
+            "text": "You come in and notice layers of rocks with stuff underneath.\n"
+                    "It appears there was a wishing well here with coins still here,\n"
+                    "but it's under a few feet of stones.",
             "exits": {
                 "north": "mud",
                 "east": "swordstone"
@@ -267,19 +276,20 @@ def init_game():
         },
         "swordstone": {
             "flavor": "The chamber turns to roman architecture, a single stone in the centre.",
-            "text": "\n"
-                    "",
+            "text": "The stone in the middle of the room has a sword in it, but it's not even\n"
+                    "stuck. It makes you wonder why someone might put it here. Cool sword though",
             "exits": {
                 "south": "drawings",
                 "west": "rockfall"
             },
-            "items": [],
-            "enemies": []
+            "items": ["coolsword"],
+            "enemies": ["grue"]
         },
         "drawings": {
             "flavor": "A Roman room full of incomprehensible diagrams and drawings.",
-            "text": "\n"
-                    "",
+            "text": "You spend a good half hour trying to make sense of the scrawlings on the\n"
+                    "walls, but they only get more confusing as you look on. They are either\n"
+                    "scrawlings of madmen or definitely in a different language you don't know.",
             "exits": {
                 "north": "swordstone",
                 "south": "gambleturtle"
@@ -289,29 +299,21 @@ def init_game():
         },
         "gambleturtle": {
             "flavor": "A very small room containing a single turtle",
-            "text": "\n"
-                    "",
+            "text": "What do you know, the turtle... wants to gamble with you? How does it know\n"
+                    "English? You don't know, but you're incredibly compulsed to gamble with the\n"
+                    "turtle to the point you cannot stop yourself.",
             "exits": {
-                "north": "drawings",
-                "west": "bossfight"
-            },
-            "items": [],
-            "enemies": []
-        },
-        "bossfight": {
-            "flavor": "A very clearly hostile arena. Don't go here if you don't want a fight.",
-            "text": "\n"
-                    "",
-            "exits": {
-                "east": "gambleturtle",
+                "north": "drawings"
             },
             "items": [],
             "enemies": []
         },
         "elevator": {
             "flavor": "An elevator.",
-            "text": "\n"
-                    "",
+            "text": "The elevator has a coin slot on it, reading \"10 coins a trip\", which\n"
+                    "someone scribbled out and replaced with 5 hastily. Clearly, the price was"
+                    "not appreciated by whoever was here last. You pay the updated toll and the\n"
+                    "elevator whirrs to life, taking you down.",
             "exits": {
                 "down": "collapsedmine",
             },
@@ -320,18 +322,18 @@ def init_game():
         },
         "collapsedmine": {
             "flavor": "A mineshaft with a collapsed ceiling.",
-            "text": "\n"
-                    "",
+            "text": "Skeletons are scattered about. The miners that were here before must have\n"
+                    "been working when the ceiling came down on them. A result of poor management.",
             "exits": {
                 "south": "office", 
             },
             "items": [],
-            "enemies": []
+            "enemies": ["ghost"]
         },
         "office": {
             "flavor": "An office clearly designed to get work and not play done.",
-            "text": "\n"
-                    "",
+            "text": "Many books are scattered on shelves. Many disintegrate the second you touch\n"
+                    "them, and what few are left ironically record the pay of people making coins.",
             "exits": {
                 "north": "collapsedmine",
                 "west": "refinery",
@@ -342,8 +344,9 @@ def init_game():
         },
         "refinery": {
             "flavor": "Belts and furnaces where ore once was refined into pure gold.",
-            "text": "\n"
-                    "",
+            "text": "Somehow, things are still active and definitely hot. Maybe robots help, or magic -\n"
+                    "you're not entirely sure. This area was worked by many staff before scooping the"
+                    "molten gold into coin-shaped molds and pushed around, but it's long dormant.",
             "exits": {
                 "east": "office",
                 "south": "smeltery"
@@ -353,8 +356,9 @@ def init_game():
         },
         "smeltery": {
             "flavor": "Molten gold continues to flow in circles in eroded channels.",
-            "text": "\n"
-                    "",
+            "text": "There's an island in the middle that contains a half-full tray of fresh coins,\n"
+                    "but you'll have to be careful as you cross over it - you might fall in, burning\n"
+                    "yourself horribly. Molten gold is not fun to get off skin.",
             "exits": {
                 "north": "refinery",
             },
@@ -531,6 +535,23 @@ def init_game():
         }
     }
     items = {
+        "fang": {
+            "name": "Cobra's Fang",
+            "flavor": "Still imbued with heavy poison.",
+            "type": "weapon",
+            "description": "Can be mounted to a stick and used to cause huge damage.",
+            "min_dmg": 10,
+            "max_dmg": 20
+        },
+        "coolsword": {
+            "name": "Really Cool Sword",
+            "flavor": "This is the most badass sword you've ever seen, and you've seen a lot.",
+            "type": "weapon",
+            "description": "A hilt encrusted with rubies, and a copper-coated blade that will\n"
+                           "easily inspire fear in your enemies.",
+            "min_dmg": 10,
+            "max_dmg": 20
+        },
         "datestamp": {
             "name": "Rotating date stamp",
             "flavor": "It's one of those rotating stamp things you find at the bank.",
@@ -545,6 +566,13 @@ def init_game():
             "description": "This would likely be worth some decent coin if sold to one who\n"
                            "understood the worth of aged alcohol, especially with this\n"
                            "much time put in. Quite a rare find."
+        },
+        "honey": {
+            "name": "Jar of Honey",
+            "flavor": "Super fresh raw honey collected from underground bees (???)",
+            "type": "potion",
+            "description": "So good that it would give you a jolt of energy unrivaled\n"
+                           "by even that of pure alcohol."
         },
         "rottentomato": {
             "name": "Rotten, moldy tomato",
@@ -602,6 +630,26 @@ def init_game():
         }
     }
     enemies = {
+        "ghost": {
+            "name": "Miner's Ghost",
+            "hitpoints": 100,
+            "attacktext": "The ghost floats into you, somehow damaging you for ",
+            "misstext": "The ghost floats into you.",
+            "damage": 1,
+            "killtext": "You become a ghost. How ironic.",
+            "flavor": "It's clearly angry about being killed due to a poor manager.",
+            "drops": []
+        },
+        "cobra": {
+            "name": "Cobra",
+            "hitpoints": 8, 
+            "attacktext": "The cobra strikes and bites your ankle powerfully, causing ",
+            "misstext": "The cobra sinks its fangs into thin air.",
+            "damage": 20,
+            "killtext": "You quickly lose consciousness from the paralyzing venom, never regaining it.",
+            "flavor": "It moves faster than you can keep track of.",
+            "drops": ["fang"]
+        },
         "grue": {
             "name": "Grue",
             "hitpoints": 20,
@@ -643,7 +691,6 @@ def help():
           "quit: Why would you ever want to do that?"
           )
 
-
 def get_item(item, player, rooms, items, enemies):
     if item in rooms[player["location"]]["items"]:
         player["inventory"].append(item)
@@ -651,9 +698,7 @@ def get_item(item, player, rooms, items, enemies):
         print(f"Picked up a {items[item]['name']}.")
     else:
         print(f"You can't see any {item} here")
-    
     enemy_phase(player, rooms, items, enemies)
-
 
 def use_item(item, player, rooms, items, enemies):
     if item not in items:
@@ -661,12 +706,12 @@ def use_item(item, player, rooms, items, enemies):
         return
     if items[item]["type"] == "potion":
         if item == "brandy":
-            player["hp"] = min(player["hp"] + 10, player["max_hp"])
+            player["hp"] = min(player["hp"] + 15, player["max_hp"])
             print("The brandy stings the inside of your mouth and heals you for 15 HP.")
             player["inventory"].remove(item)
-        elif item == "poisonpotion":
-            player["hp"] -= 10
-            print("It tastes like acid and burns away 10 HP. Why would you drink this?")
+        elif item == "honey":
+            player["hp"] = min(player["hp"] + 15, player["max_hp"])
+            print("The honey gives you a warm feeling inside as you drink it. +15HP.")
             player["inventory"].remove(item)
     else:
         print("You can't use this item! Try 'equip'ping it?")
@@ -842,11 +887,59 @@ def check_location(location, player, rooms, items, enemies):
                 player["coins"] += 5
                 print(f"You win! You're up 5 coins, with your total now being {player['coins']}")
                 print("(the man sighs): Maybe you'll come back another time and give me another chance")
+    elif location == "death":
+        sys.exit(0)
+    elif location == "gate":
+        player["coins"] -= 5
+    elif location == "doors":
+        print("The clockwork puppets offer to help you through the room,")
+        print("but they request payment of 50 coins for their guidance. Oblige?")
+        choice = input("[Y/N] > ")
+        if choice.lower() == "y":
+            if player["coins"] < 50:
+                print("You don't have enough coins for that!")
+                return
+            player["coins"] -= 50
+            print("The guards speak:")
+            print("> Through the marble door, you will find truth, and loot with it.")
+            print("> Through the ivy door, you will find only lies, yet move quickly.")
+            print("> The wooden door holds only death, and nothing else.")
+    elif location == "mud":
+        player["coins"] += 5
+    elif location == "rockfall":
+        choice = input("Dig for coins? [Y/N]")
+        if choice.lower() == "y":
+            print("You find 10 coins buried in the well, but a rock falls on your")
+            print("head, dealing 4 damage to you.")
+            player["coins"] += 10
+            player["hp"] -= 4
+    elif location == "gambleturtle":
+        print("Pick a wager (over 5 coins)")
+        wager = input("...> ")
+        print("The turtle rolled... ", end = "")
+        turtleroll = random.randint(1, 6)
+        yourroll = random.randint(1, 6)
+        time.sleep(1)
+        print(turtleroll)
+        print("You rolled... ", end = "")
+        time.sleep(1)
+        print(yourroll)
+        if turtleroll > yourroll:
+            player["coins"] -= wager
+            print("The turtle chuckles, takes your coins, then retracts into his shell.")
+        else:
+            player["coins"] += wager
+            print("The turtle is mad and retracts into his shell, spitting out the coins owed.")
+    elif location == "elevator":
+        player["coins"] -= 5
     elif location == "temp":
         pass
 
 def input_parser(cmd_in, player, rooms, items, enemies):
     command = cmd_in.lower()
+    if command != "g":
+        last_input = command
+
     fail = [
         "What are you trying to do?", "You screwed SOMETHING up.", "You feel a disturbance in the Force.",
         "You feel a disturbance in the Schwartz.", "Do better", "Something's wrong, but you don't know what...",
@@ -854,6 +947,9 @@ def input_parser(cmd_in, player, rooms, items, enemies):
     ]
     random.shuffle(fail)
 
+    if command == "g":
+        command = last_input
+    
     if command == "help":
         help()
 
@@ -976,6 +1072,10 @@ def game_loop(player, rooms, items, enemies):
             first_time = True
             location = str(player["location"])
             check_location(location, player, rooms, items, enemies)
+        
+        if player['hp'] <= 0:
+            print("Your vision fades to black. You Died.")
+            sys.exit(0)
 
 def main():
     sys.excepthook = handle_exit
