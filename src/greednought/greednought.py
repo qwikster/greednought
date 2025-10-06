@@ -309,7 +309,8 @@ def init_game():
                     "English? You don't know, but you're incredibly compulsed to gamble with the\n"
                     "turtle to the point you cannot stop yourself.",
             "exits": {
-                "north": "drawings"
+                "north": "drawings",
+                "east": "elevator"
             },
             "items": [],
             "enemies": []

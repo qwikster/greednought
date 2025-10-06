@@ -1,6 +1,6 @@
 [project]
 name = "greednought"
-version = "0.1.1"
+version = "0.1.2"
 description = "A text adventure game created for Week 5 of Hack Club's Siege"
 readme = "README.md"
 requires-python = ">=3.12"
