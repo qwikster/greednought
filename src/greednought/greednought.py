@@ -1,7 +1,7 @@
 import time  # noqa: F401
 import sys
 import random
-
+last_input = ""
 
 def handle_exit(exc_type, exc_value, exc_traceback):
     if exc_type is KeyboardInterrupt:
@@ -107,7 +107,9 @@ def init_game():
             "exits": {
                 "south": "entrance2",
                 "down": "gate"
-            }
+            },
+            "items": [],
+            "enemies": []
         },
         "gate": {
             "flavor": "A rusted shut gate at the bottom of a pit",
@@ -119,7 +121,8 @@ def init_game():
             "exits": {
                 "south": "doors"
             },
-            "items": ["datestamp"]
+            "items": ["datestamp"],
+            "enemies": []
         },
         "doors": {
             "flavor": "A set of three doors, guarded by clockwork puppets.",
@@ -132,7 +135,8 @@ def init_game():
                 "west": "truth",
                 "east": "lies"
                 },
-            "items": []
+            "items": [],
+            "enemies": []
         },
         "death": {
             "flavor": "An ornate, antique wooden door.",
@@ -144,7 +148,8 @@ def init_game():
                     "room. A set of robots comes through to clean the room again, but the\n"
                     "life has already left your eyes.",
             "exits": {},
-            "items": []
+            "items": [],
+            "enemies": []
         },
         "truth": {
             "flavor": "An incredibly heavy pure-white marble door.",
@@ -154,7 +159,8 @@ def init_game():
             "exits": {
                 "south": "mud"
             },
-            "items": ["brandy"]
+            "items": ["brandy"],
+            "enemies": []
         },
         "lies": {
             "flavor": "A door absolutely covered in vines. Not threatening, but very natural.",
@@ -701,7 +707,8 @@ def help():
           "attack: Type alone to get a battle overview \n"
           "run: Escape a battle \n"
           "win: Naturally... \n"
-          "quit: Why would you ever want to do that?"
+          "quit: Why would you ever want to do that?\n"
+          "g: Repeat last command"
           )
 
 def get_item(item, player, rooms, items, enemies):
@@ -797,7 +804,7 @@ def move_player(direction, player, rooms, items, enemies):
     player["location"] = next_room
     print(f"You move {direction}.")
     describe_room(next_room, player, rooms, items, enemies)
-    check_location(location, player, rooms, items, enemies)
+    check_location(next_room, player, rooms, items, enemies)
     
     base_enemies = rooms[next_room].get("enemies", [])
     if base_enemies:
@@ -850,7 +857,7 @@ def attack(target_name, player, rooms, items, enemies):
             for drop in drops:
                 rooms[player["location"]]["items"].append(drop)
         player["battle"].remove(target)
-        rooms[player['location']][enemies].remove(target['type'])
+        rooms[player['location']]['enemies'].remove(target['type'])
         
     enemy_phase(player, rooms, items, enemies)
 
@@ -994,6 +1001,7 @@ def check_location(location, player, rooms, items, enemies):
         pass
 
 def input_parser(cmd_in, player, rooms, items, enemies):
+    global last_input
     command = cmd_in.lower()
     if command != "g":
         last_input = command
