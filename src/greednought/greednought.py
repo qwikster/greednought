@@ -367,19 +367,21 @@ def init_game():
         },
         "barracks": {
             "flavor": "Half-buried miner's bunks, not designed for comfort",
-            "text": "\n"
-                    "",
+            "text": "The bunks are decayed, the straw mattresses turned to dust. One skeletal arm\n"
+                    "still clutches a coin purse with a single coin left inside. A translucent miner\n"
+                    "wanders here, endlessly searching for his pay. He does not like being disturbed.\n",
             "exits": {
                 "north": "office",
                 "south": "airvent"
             },
             "items": [],
-            "enemies": []
+            "enemies": ["ghost"]
         },
         "airvent": {
             "flavor": "A vent leading straight downwards with a wide grate over it.",
-            "text": "\n"
-                    "",
+            "text": "The grate rattles beneath your feet. As you step onto it, two coins fall from your\n"
+                    "pocket down to whatever lies below. You can make out air rising through the shaft,\n"
+                    "smelling uncannily like old incense.",
             "exits": {
                 "north": "barracks",
                 "down": "shrine"
@@ -389,8 +391,8 @@ def init_game():
         },
         "shrine": {
             "flavor": "A room containing a hill with a shrine of some kind on it.",
-            "text": "\n"
-                    "",
+            "text": "An old altar rests atop a mound of dust. A cracked plaque reads:\n"
+                    "'Give, and be made whole. Take, and be hollow.' You sense powerful energy.",
             "exits": {
                 "up": "airvent",
             },
@@ -399,30 +401,19 @@ def init_game():
         },
         "robotguards": {
             "flavor": "Multiple humanoid robotic sentries guard a door.",
-            "text": "\n"
-                    "",
+            "text": "You approach the guards and fans whir to life - a message appears\n"
+                    "on their worn nixie tube screens: '20 COINS OR ATTACK'.",
             "exits": {
                 "west": "office",
                 "south": "cranklift",
-                "east": "stream"
             },
             "items": [],
-            "enemies": []
-        },
-        "stream": {
-            "flavor": "Water flows over a bed of immovable rocks with cracks in them",
-            "text": "\n"
-                    "",
-            "exits": {
-                "west": "robotguards",
-            },
-            "items": [],
-            "enemies": []
+            "enemies": ["guard", "guard"]
         },
         "cranklift": {
             "flavor": "A crank-operated mine elevator.",
-            "text": "\n"
-                    "",
+            "text": "The elevator was designed to be operated by multiple strong miners,\n"
+                    "so you'll have to risk it - it might descend too fast and hurt you.",
             "exits": {
                 "north": "robotguards",
                 "down": "antechamber"
@@ -432,8 +423,8 @@ def init_game():
         },
         "antechamber": {
             "flavor": "Walls engraved with endless dollar symbols. How vain.",
-            "text": "\n"
-                    "",
+            "text": "This chamber hums faintly, as if the gold in the walls remembers every\n"
+                    "coin ever minted. It feels like a final warning as to what comes ahead.",
             "exits": {
                 "south": "hall",
             },
@@ -442,83 +433,71 @@ def init_game():
         },
         "hall": {
             "flavor": "The antechamber continues into a hall.",
-            "text": "\n"
-                    "",
+            "text": "Echoes of coins clattering on marble follow your every step.",
             "exits": {
                 "west": "shrines",
                 "south": "grueboss",
-                "east": "garden"
+                "east": "echoes"
             },
             "items": [],
             "enemies": []
         },
         "shrines": {
-            "flavor": "Many tiny shrines on their own little pedestals, like a cemetary.",
-            "text": "\n"
-                    "",
+            "flavor": "Many tiny shrines on their own little pedestals, like a cemetery.",
+            "text": "Each shrine has a tiny coin slot on each for some reason. Most appear filled,\n"
+                    "but a few have slots clogged with rust over time.",
             "exits": {
                 "down": "treasury",
                 "east": "hall"
             },
-            "items": [],
+            "items": ["silvercharm"],
             "enemies": []
         },
         "treasury": {
             "flavor": "A huge vault door.",
-            "text": "\n"
-                    "",
+            "text": "You find piles of ancient coins, but touching them feels wrong, like the coins\n"    
+                    "are hollow inside. You sense these won't be usable as actual currency.",
             "exits": {
                 "up": "shrines",
             },
-            "items": [],
-            "enemies": []
-        },
-        "garden": {
-            "flavor": "A garden of many fruits.",
-            "text": "\n"
-                    "",
-            "exits": {
-                "east": "hall",
-                "west": "echoes"
-            },
-            "items": [],
+            "items": ["brandy"],
             "enemies": []
         },
         "echoes": {
             "flavor": "A cubic room completely devoid of anything but a thick haze.",
-            "text": "\n"
-                    "",
+            "text": "You hear every coin you've lost echo around you, as if they were alive.\n"
+                    "The air here feels alive. A pulse below draws you downward.",
             "exits": {
-                "west": "garden",
+                "west": "hall",
                 "down": "heart"
             },
             "items": [],
             "enemies": []
         },
         "heart": {
-            "flavor": "A room almost adorned with veins in the walls.",
-            "text": "\n"
-                    "",
+            "flavor": "A pulsating chamber of living stone, veined with gold.",
+            "text": "You realize the entire dungeon is alive, beating to the rhythm of greed.\n"
+                    "A huge beating monolith rests at the center, shaped like a heart.",
             "exits": {
-                "up": "echoes",
+                "up": "echoes"
             },
             "items": [],
             "enemies": []
         },
         "grueboss": {
-            "flavor": "Another obvious arena - this time in your path.",
-            "text": "\n"
-                    "",
+            "flavor": "An obvious arena - in your path.",
+            "text": "The floor trembles as a deep growl fills the chamber. From the shadows emerges\n"
+                    "a towering, ancient Grue - stronger and hungrier than the rest. Prepare yourself.",
             "exits": {
                 "south": "toll",
             },
             "items": [],
-            "enemies": []
+            "enemies": ["ancient_grue"]
         },
         "toll": {
-            "flavor": "Two massive, fortified gates.",
-            "text": "\n"
-                    "",
+            "flavor": "Two massive, fortified gates, marked with golden lettering.",
+            "text": "The inscription reads: 'Only those who paid their dues may pass.'\n"
+                    "You notice a glowing slot - it asks 50 coins' penance.",
             "exits": {
                 "south": "victory",
             },
@@ -527,14 +506,28 @@ def init_game():
         },
         "victory": {
             "flavor": "Your victory!",
-            "text": "\n"
-                    "",
+            "text": "A huge, sentient olive appears to judge your progress. Seeing that you\n"
+                    "passed the toll, they descend upon you and hand you your prize with their\n"
+                    "olive-ish hands, finally disappearing in a wave of thousands of golden coins.",
             "exits": {},
-            "items": [],
+            "items": ["framework"],
             "enemies": []
         }
     }
     items = {
+        "framework": {
+            "name": "Schmamework 69",
+            "flavor": "Legally distinct, not related to Framework (TM)",
+            "type": "potion",
+            "description": "The fruits of your labor."
+        },
+        "silvercharm": {
+            "name": "Silver Charm",
+            "flavor": "Etched with tiny runes for protection.",
+            "type": "armor",
+            "hp": 60,
+            "description": "Wearing it feels like luck itself clings to you."
+        },
         "fang": {
             "name": "Cobra's Fang",
             "flavor": "Still imbued with heavy poison.",
@@ -549,8 +542,8 @@ def init_game():
             "type": "weapon",
             "description": "A hilt encrusted with rubies, and a copper-coated blade that will\n"
                            "easily inspire fear in your enemies.",
-            "min_dmg": 10,
-            "max_dmg": 20
+            "min_dmg": 12,
+            "max_dmg": 25
         },
         "datestamp": {
             "name": "Rotating date stamp",
@@ -630,6 +623,16 @@ def init_game():
         }
     }
     enemies = {
+        "ancient_grue": {
+            "name": "Ancient Grue",
+            "hitpoints": 80,
+            "attacktext": "The Ancient Grue emits a roar and swipes violently, dealing ",
+            "misstext": "The Grue's claws narrowly miss you, tearing the air itself.",
+            "damage": 10,
+            "killtext": "You have been eaten by a Grue.",
+            "flavor": "A beast older than greed itself, awakened by the sound of coin on stone.",
+            "drops": ["gruehair"]
+        },
         "ghost": {
             "name": "Miner's Ghost",
             "hitpoints": 100,
@@ -669,7 +672,17 @@ def init_game():
             "killtext": "The rat overwhelms you and knocks you over.",
             "flavor": "It's perusing the rotten tomatoes.",
             "drops": []
-        }
+        },
+        "guard": {
+            "name": "Clockwork Guard",
+            "hitpoints": 30,
+            "attacktext": "The mechanical guard slams its metal arm into you for ",
+            "misstext": "The guard's gears jam, missing its strike.",
+            "damage": 8,
+            "killtext": "You are crushed beneath the guard's cold iron frame.",
+            "flavor": "Old security machines - still somehow alive, powered by unseen cables.",
+            "drops": []
+        },
     }
     return player, rooms, items, enemies
 
@@ -713,6 +726,9 @@ def use_item(item, player, rooms, items, enemies):
             player["hp"] = min(player["hp"] + 15, player["max_hp"])
             print("The honey gives you a warm feeling inside as you drink it. +15HP.")
             player["inventory"].remove(item)
+        elif item == "framework":
+            print("You eat the laptop. Yummy.")
+            sys.exit(0)
     else:
         print("You can't use this item! Try 'equip'ping it?")
 
@@ -781,6 +797,7 @@ def move_player(direction, player, rooms, items, enemies):
     player["location"] = next_room
     print(f"You move {direction}.")
     describe_room(next_room, player, rooms, items, enemies)
+    check_location(location, player, rooms, items, enemies)
     
     base_enemies = rooms[next_room].get("enemies", [])
     if base_enemies:
@@ -915,7 +932,7 @@ def check_location(location, player, rooms, items, enemies):
             player["hp"] -= 4
     elif location == "gambleturtle":
         print("Pick a wager (over 5 coins)")
-        wager = input("...> ")
+        wager = int(input("...> "))
         print("The turtle rolled... ", end = "")
         turtleroll = random.randint(1, 6)
         yourroll = random.randint(1, 6)
@@ -932,7 +949,48 @@ def check_location(location, player, rooms, items, enemies):
             print("The turtle is mad and retracts into his shell, spitting out the coins owed.")
     elif location == "elevator":
         player["coins"] -= 5
-    elif location == "temp":
+    elif location == "smeltery":
+        print("Attempt to retrieve the coins?")
+        choice = input("[Y/N]...> ")
+        if choice.lower() == "y":
+            if random.random() > 0.2:
+                print("You make it across and grab 20 coins off a tray!")
+                player["coins"] += 20
+            else:
+                print("You trip and fall into a vat of boiling gold. 20 damage.")
+                player["hp"] -= 20
+    elif location == "barracks":
+        player["coins"] += 1
+    elif location == "airvent":
+        player["coins"] -= 2
+    elif location == "shrine":
+        print("Give, or take?")
+        choice = input("[G/T] ...>")
+        if choice.lower() == "g":
+            print("You give a single coin and your body is flooded with warmth.")
+            player["hp"] = player["max_hp"]
+        elif choice.lower() == "t":
+            print("You are struck by unseen hands, a punishment for meddling with the gods.")
+            player["hp"] = (player["max_hp"] / 2)
+    elif location == "cranklift":
+        if random.random() > 0.5:
+            time.sleep(2)
+            print("You make it down the elevator safely.")
+        else:
+            time.sleep(2)
+            print("The elevator runs away from you and slams against the ground, dealing 5 HP")
+            player["hp"] -= 5
+            
+    elif location == "toll":
+        time.sleep(5)
+        if player["coins"] >= 50:
+            print("You insert the coins, and the gate lets you pass.")
+            player["coins"] -= 50
+        else:
+            print("You insert all you have, but it does not total 50. The gate grows")
+            print("a pair of massive arms, then crushes you against the ground for even")
+            print("thinking you might be able to get past. GAME OVER.")
+            sys.exit(0)
         pass
 
 def input_parser(cmd_in, player, rooms, items, enemies):
@@ -1071,7 +1129,6 @@ def game_loop(player, rooms, items, enemies):
         if player["location"] != location:
             first_time = True
             location = str(player["location"])
-            check_location(location, player, rooms, items, enemies)
         
         if player['hp'] <= 0:
             print("Your vision fades to black. You Died.")
